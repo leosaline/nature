@@ -1,16 +1,23 @@
 package com.saline.nature.controller
 
 import com.saline.nature.entity.User
+import com.saline.nature.repository.UserRepository
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import javax.jws.soap.SOAPBinding
 
 @RestController
-class UserController{
+@RequestMapping("/user")
+class UserController(private val userRepository: UserRepository){
 
-    @GetMapping("/user")
-    fun user(): User{
-        return User("leo","leonardo","saline","learning", 0)
+    @GetMapping("/")
+    fun findAll() = userRepository.findAll()
+
+    @GetMapping("/{id}")
+    fun user(@PathVariable id: Long) = userRepository.findById(id);
+
+    @PostMapping("/")
+    fun saveUser(@RequestBody user: User){
+        userRepository.save(user);
     }
 }
